@@ -217,4 +217,140 @@ fun main() {
 // ❗ Let's add necessary ‘else' branch.
 
 
+// ✅ Classes and Inheritance
+// ✔ 'abstract': Create an abstract class where some functionality is left to be implemented by its subclasses. An abstract class can therefore not be instantiated.
+// + All abstract properties, methods defined in an abstract class must be implemented in any of its subclasses with 'override' keyword.
+// ✔ 'override': Use override keyword to override properties and functions in subclasses.
+// ✔ 'private': Make a property private, so it can only be used inside the class.
+// + 'private' is a visibility modifier in Kotlin meaning that the property is only visible to (and can be used inside) 'this class'.(so does inherited class ❗)
+// ✔ 'with': When you are working with a specific instance of a class and need to access multiple properties and functions of that instance, you can say "do all the following operations with this instance object" using a with statement. 
+// ✔ 'super': Use the super keyword to call the function that is defined in the parent.
 
+fun main() {
+    val squareCabin = SquareCabin(6)
+
+    with(squareCabin) {
+        println("\nSquare Cabin\n============")
+        println("Capacity: ${capacity}")
+        println("Material: ${buildingMaterial}")
+        println("Has room? ${hasRoom()}")
+    }
+}
+
+abstract class Dwelling(private var residents: Int) {
+    abstract val buildingMaterial : String
+    abstract val capacity: Int
+    
+    fun hasRoom(): Boolean {
+    return residents < capacity
+	}
+}
+
+class SquareCabin(residents: Int): Dwelling(residents){
+    override val buildingMaterial = "Wood"
+    override val capacity = 6
+}
+
+// ❓ Error "This type is final, so it cannot be inherited from"
+// => This error means that the RoundHut class cannot be subclassed (or inherited from). By default, in Kotlin, classes are final and cannot be subclassed.
+// ✔ You are only allowed to inherit from 'abstract' classes or classes that are marked with the 'open' keyword. 
+// = You do not need to use the open keyword when defining abstract classes.
+
+// ✔ arguments only with a subclass
+/** 
+class RoundTower(
+    residents: Int,
+    val floors: Int = 2) : RoundHut(residents) {
+
+    ...
+}
+*/
+// Notice that you don't need to pass this to the parent RoundHut constructor because floors is defined here in RoundTower and RoundHut has no floors.
+// In your code, add '= 2' after the declaration of floors to assign it a default value of 2.
+
+// tip. For the area values, it would be a nicer user experience to only show a couple of decimal places. => ex. println("Floor area: %.2f".format(floorArea()))
+import kotlin.math.PI
+
+fun main() {
+    val squareCabin = SquareCabin(6, 11.1)
+    val roundHut = RoundHut(3, 9.0)
+    var roundTower = RoundTower(3, 9.0, 3)
+
+    with(squareCabin) {
+        println("\nSquare Cabin\n============")
+        println("Capacity: ${capacity}")
+        println("Material: ${buildingMaterial}")
+        println("Has room? ${hasRoom()}")
+        println("Floor area: %.2f".format(floorArea()))
+    }
+    with(roundHut) {
+        println("\nRound Hut\n============")
+        println("Capacity: ${capacity}")
+        println("Material: ${buildingMaterial}")
+        println("Has room? ${hasRoom()}")
+        getRoom()
+		println("Has room? ${hasRoom()}")
+        getRoom()
+        println("Floor area: %.2f".format(floorArea()))
+    }
+    with(roundTower) {
+        println("\nRound Tower\n============")
+        println("Capacity: ${capacity}")
+        println("Material: ${buildingMaterial}")
+        println("Has room? ${hasRoom()}")
+        println("Floor area: %.2f".format(floorArea()))
+    }
+}
+
+abstract class Dwelling(private var residents: Int) {
+    abstract val buildingMaterial : String
+    abstract val capacity: Int
+    
+    fun hasRoom(): Boolean {
+    return residents < capacity
+	}
+    
+    abstract fun floorArea() : Double
+
+    fun getRoom() {
+    if (capacity > residents) {
+        residents++
+        println("You got a room!")
+    } else {
+        println("Sorry, at capacity and no rooms left.")
+    }
+}
+}
+
+class SquareCabin(
+    residents: Int, 
+    val length: Double): Dwelling(residents){
+    override val buildingMaterial = "Wood"
+    override val capacity = 6
+    override fun floorArea(): Double {
+        return length * length
+    }
+}
+
+open class RoundHut(
+    residents: Int,
+	val radius: Double): Dwelling(residents) {
+    override val buildingMaterial = "Straw"
+    override val capacity = 4
+    override fun floorArea(): Double {
+        return radius * radius * PI
+    }
+}
+
+class RoundTower(
+    residents: Int,
+    radius: Double,
+    val floor: Int = 2) : RoundHut(residents, radius) {
+    override val buildingMaterial = "Stone"
+    override val capacity = 4 * floor
+    override fun floorArea(): Double {
+        return super.floorArea() * floor
+    }
+}
+
+// tip. You can use residents++ as a shorthand for residents = residents + 1 to add 1 to the residents variable.
