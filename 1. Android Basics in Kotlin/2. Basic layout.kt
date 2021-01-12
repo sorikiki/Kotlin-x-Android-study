@@ -26,3 +26,20 @@
 
 // ❓ contentDescription: it can help make your app more usable with TalkBack by defining the purpose of the UI element
 // 😊 Instead of setting the content description that is announced to the user, you can just tell TalkBack to skip the ImageView by setting its importantForAccessibility attribute to no.
+
+// ✅ Activities
+// an 'Activity' takes up the whole screen of your running app.
+// The top-level or first activity is often called the 'MainActivity' and is provided by the project template.
+// ex. In a photo gallery app, you could have an Activity for displaying a grid of photos, a second Activity for viewing an individual photo, and a third Activity for editing an individual photo. 
+
+// app> java > com.example.diceroller > MainActivity.kt
+// 💥 N O T I C E 💥
+// 1. Earlier, you learned that every Kotlin program must have a main() function. Android apps operate differently. 
+// => Instead of calling a main() function, the Android system calls the 'onCreate()' method of your MainActivity when your app is opened for the first time.
+// 2. Android provides a framework of numerous classes to make writing Android apps easier.
+// => You can specify which class in the framework to use in your code by using an import statement. 
+// => For example, the Button class is defined in android.widget.Button.
+// => Fortunately, Android Studio helps you choose the correct imports when you are using
+// 3. Android automatically assigns ID numbers to the resources in your app. 
+// => For example, the Roll button has a resource ID, and the string for the button text also has a resource ID. Resource IDs are of the form R.<type>.<name>; for example, R.string.roll. For View IDs, the <type> is id, for example, R.id.button.
+// 4. When it assigns an object to a variable, Kotlin doesn't copy the entire object each time, it saves a reference to the object.
