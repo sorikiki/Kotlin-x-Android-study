@@ -268,13 +268,15 @@ class RoundTower(
 // Notice that you don't need to pass this to the parent RoundHut constructor because floors is defined here in RoundTower and RoundHut has no floors.
 // In your code, add '= 2' after the declaration of floors to assign it a default value of 2.
 
-// tip. For the area values, it would be a nicer user experience to only show a couple of decimal places. => ex. println("Floor area: %.2f".format(floorArea()))
+
+// tip. For the area values, it would be a nicer user experience to only show a couple of decimal places. 
+// => ex. println("Floor area: %.2f".format(floorArea()))
 import kotlin.math.PI
 
 fun main() {
     val squareCabin = SquareCabin(6, 11.1)
     val roundHut = RoundHut(3, 9.0)
-    var roundTower = RoundTower(3, 9.0, 3)
+    val roundTower = RoundTower(3, 9.0, 3)
 
     with(squareCabin) {
         println("\nSquare Cabin\n============")
