@@ -356,3 +356,151 @@ class RoundTower(
 }
 
 // tip. You can use residents++ as a shorthand for residents = residents + 1 to add 1 to the residents variable.
+
+
+// ✅ List
+// ◽ Read-only list: List cannot be modified after you create it.
+// ◽ Mutable list: MutableList can be modified after you create it, meaning you can add, remove, or update its elements.
+
+// ✔ When using List or MutableList, you must specify the type of element that it can contain.
+// => If the type of the variable can be guessed (or inferred) based on the value on the right hand side of the assignment operator (=), then you can omit the data type of the variable. 
+/*
+    For example, List<Int> holds a list of integers and List<String> holds a list of Strings. 
+    If you define a Car class in your program, you can have a List<Car> that holds a list of Car object instances.
+ */
+
+// ✔ Create a List
+// : Create a new List using the Kotlin standard library function listOf(), and pass in the elements of the list as arguments separated by commas.
+fun main() {
+    val numbers = listOf(1, 2, 3, 4, 5, 6)
+    println("List: " + numbers)
+    println("Size: ${numbers.size}")
+}
+// List: [1, 2, 3, 4, 5, 6]
+// Size: 6
+
+// ✔ Accessing list elements
+// : You could call the get() function with the desired index as numbers.get(0) or you can use shorthand syntax with square brackets around the index as numbers[0]
+// : Kotlin also supports first() and last() operations on a list.
+// : Another useful list operation is the contains() method to find out if a given element is in the list.
+fun main() {
+    val numbers = listOf(1, 2, 3, 4, 5, 6)
+    println("List: " + numbers)
+    println("Size: ${numbers.size}")
+    println("First element: ${numbers[0]}")
+    println("Second element: ${numbers.get(1)}")
+    println("First element: ${numbers.first()}")
+    println("Last element: ${numbers.last()}")
+    println("Is 4 in a list?: ${numbers.contains(4)}")
+    println("Is 7 in a list?: ${numbers.contains(7)}")
+}
+/*
+    List: [1, 2, 3, 4, 5, 6]
+    Size: 6
+    First element: 1
+    Second element: 2
+    Last index: 5
+    Last element: 6
+    First: 1
+    Last: 6
+    Contains 4? true
+    Contains 7? false 
+*/
+
+// ✔ Lists are read-only
+// 🤔 Wrong code because of immutability
+fun main() {
+    val colors = listOf("green", "orange", "blue")
+}
+colors.add("purple") // Error
+colors[0] = "yellow" // Error
+
+// However, there are a number of operations on lists that don't change the list, but will return a new list. 
+// => Two of those are reversed() and sorted(). ✨
+
+// ✔ Create a mutable list
+// : Mutable lists are of type MutableList, and you can create them by calling mutableListOf().
+// ➕ Tip: when you want to make 'empty' list or mutable list!
+// => Do this by adding the type in angle brackets right after mutableListOf or listOf.
+// ex. val entrees = mutableListOf<String>()
+// => Another way you could have fixed the error is by specifying the data type of the variable upfront.
+// ex. val entrees: MutableList<String> = mutableListOf()
+// ➕ Note: You can use val for a mutable list because the entrees variable contains a reference to the list, and that reference doesn't change even if the contents of the list do.
+
+// ✔ Add elements to a mutable list
+// : The add() function returns true if adding the element to the list succeeded, false otherwise.
+// : Instead of adding elements one by one using add(), you can add multiple elements at a time using addAll() and pass in a list.
+// : Remember to only add elements of the correct data type to a list.
+
+// ✔ Remove elements from a mutable list
+// : Call remove() to remove "spaghetti" from the list. Print the list again. 
+// => it returns true or false whether adding an element suceeds.
+// : You can also specify the index of the element to remove. 
+// => The return value of the removeAt(0) is the first element which got removed from the list.
+// : If you want to clear the whole list, you can call clear()
+// : Kotlin gives you a way to check if a list is empty using isEmpty() function.
+// => The isEmpty() method is useful if you want to do an operation on a list or access a certain element, but you want to make sure that the list is not empty first.
+fun main() {
+    val entrees = mutableListOf<String>()
+    println("Entrees: $entrees")
+
+    // Add individual items using add()
+    println("Add noodles: ${entrees.add("noodles")}")
+    println("Entrees: $entrees")
+    println("Add spaghetti: ${entrees.add("spaghetti")}")
+    println("Entrees: $entrees")
+
+    // Add a list of items using addAll()
+    val moreItems = listOf("ravioli", "lasagna", "fettuccine")
+    println("Add list: ${entrees.addAll(moreItems)}")
+    println("Entrees: $entrees")
+
+    // Remove an item using remove()
+    println("Remove spaghetti: ${entrees.remove("spaghetti")}")
+    println("Entrees: $entrees")
+    println("Remove item that doesn't exist: ${entrees.remove("rice")}")
+    println("Entrees: $entrees")
+
+    // Remove an item using removeAt() with an index
+    println("Remove first element: ${entrees.removeAt(0)}")
+    println("Entrees: $entrees")
+
+    // Clear out the list
+    entrees.clear()
+    println("Entrees: $entrees")
+
+    // Check if the list is empty
+    println("Empty? ${entrees.isEmpty()}")
+}
+
+// ✅ Loop
+// ✔ while
+val guestsPerFamily = listOf(2, 4, 1, 3)
+var totalGuests = 0
+var index = 0
+while (index < guestsPerFamily.size) {
+    totalGuests += guestsPerFamily[index]
+    index++
+}
+println("Total Guest Count: $totalGuests")
+
+// ✔ for
+// ➕ you can use the length property of a String to find the number of characters in that String.
+fun main() {
+    val names = listOf("Jessica", "Henry", "Alicia", "Jose")
+	for (name in names) {
+    	println("$name - Number of characters: ${name.length}")
+	}
+}
+// ➕ Note: Here are some other variations of what you can do with for loops, including using them with ranges with specific steps (instead of incrementing by 1 each time).
+/*
+    for (item in list) print(item) // Iterate over items in a list
+
+    for (item in 'b'..'g') print(item) // Range of characters in an alphabet
+
+    for (item in 1..5) print(item) // Range of numbers
+
+    for (item in 5 downTo 1) print(item) // Going backward, Prints: 5 4 3 2 1
+
+    for (item in 3..6 step 2) print(item) // Prints: 3 5
+ */

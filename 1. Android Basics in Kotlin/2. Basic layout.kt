@@ -1,3 +1,5 @@
+// goal: Improve the user interface of your app by learning about layouts, Material Design guidelines, and best practices for UI development.
+
 // ✅ View and Viewgroups 
 // The UI  of an app is what you see on the screen: text, images, buttons, and many other types of elements.
 // Each of these elements is what's called a 'View'
