@@ -357,7 +357,13 @@ class RoundTower(
 
 // tip. You can use residents++ as a shorthand for residents = residents + 1 to add 1 to the residents variable.
 
-
+// ➕ Override toString method.
+/*
+    When you print an object instance to the output, the object's toString() method is called. 
+    In Kotlin, every class automatically inherits the toString() method. 
+    The default implementation of this method just returns the object type with a memory address for the instance.
+    You should override toString() to return something more meaningful and user-friendly
+ */
 // ✅ List
 // ◽ Read-only list: List cannot be modified after you create it.
 // ◽ Mutable list: MutableList can be modified after you create it, meaning you can add, remove, or update its elements.
@@ -504,3 +510,200 @@ fun main() {
 
     for (item in 3..6 step 2) print(item) // Prints: 3 5
  */
+
+// ✅ List with <class and inheritance>.
+
+// ❓ when you input a various number of arguments into a class.
+// ◽ solution 1: define the list type and call listOf function.
+// joinToString: join all the toppings into a single string.
+// => To specify a different separator other than a comma, pass in the desired separator string as an argument to the joinToString() method.
+
+open class Item(val name: String, val price: Int)
+
+class Noodles : Item("Noodles", 10) {
+    override fun toString(): String {
+        return name
+    }
+}
+
+class Vegetables(val toppings: List<String>) : Item("Vegetables", 5) {
+    override fun toString(): String {
+        if (toppings.isEmpty()) {
+            return "$name Chef's Choice"
+        }
+        return name + " " + toppings.joinToString()
+    }
+}
+
+fun main() {
+    val noodles = Noodles()
+    val vegetables = Vegetables(listOf("cabbage", "sprouts", "onion"))
+    println(noodles)
+    println(vegetables)
+}
+// Noodles
+// Vegetables cabbage, sprouts, onion
+
+// ◽ solution 2: use 'vararg' modifier.
+// : In Kotlin, the vararg modifier allows you to pass a variable number of arguments of the same type into a function or constructor. 
+// => In that way, you can supply the different vegetables as individual strings instead of a list.
+// ❗ Note: Only one parameter can be marked as vararg and is usually the last parameter in the list.
+open class Item(val name: String, val price: Int)
+
+class Noodles : Item("Noodles", 10) {
+    override fun toString(): String {
+        return name
+    }
+}
+
+class Vegetables(vararg val toppings: String) : Item("Vegetables", 5) {
+    override fun toString(): String {
+        if (toppings.isEmpty()) {
+            return "$name Chef's Choice"
+        }
+        return name + " " + toppings.joinToString()
+    }
+}
+
+fun main() {
+    val noodles = Noodles()
+    val vegetables = Vegetables("cabbage", "sprouts", "onion")
+    println(noodles)
+    println(vegetables)
+}
+
+// Let's challenge
+// ❓ print 1) Order number, 2) Items with price, 3) total price 
+open class Order(val orderNumber: Int) {
+    private val orderItem: MutableList<Item> = mutableListOf()
+    
+    fun addItem(item: Item) {
+        orderItem.add(item)
+    }
+    
+    fun addItems(items: List<Item>) {
+        orderItem.addAll(items)
+    }
+    
+    fun print() {
+        println("Order Number: #" + orderNumber)
+        var total = 0
+        for (item in orderItem) {
+            println("${item.name}: $" + item.price)
+            total += item.price
+        }
+        println("Total: $$total")
+        println()
+    }
+}
+
+open class Item(val name: String, val price: Int)
+
+class Noodles : Item("Noodles", 10) {
+    override fun toString(): String {
+        return name
+    }
+}
+
+class Vegetables(vararg val toppings: String) : Item("Vegetables", 5) {
+    override fun toString(): String {
+        return name + " " + toppings.joinToString()
+    }
+}
+
+fun main() {
+    val order1 = Order(1)
+    order1.addItem(Noodles())
+    order1.print()
+    
+    val order2 = Order(2)
+    order2.addItems(listOf(Noodles(), Vegetables("cabbage", "sprouts", "onion")))
+    order2.print()
+    
+    val order3 = Order(3)
+    order3.addItems(listOf(Noodles(), Vegetables("carrots", "potatoes", "onion")))
+    order3.print()
+}
+
+// ✨ Implement Builder Pattern for Orders
+// : Kotlin provides the keyword this to reference the current object instance. 
+open class Order(val orderNumber: Int) {
+    private val orderItem: MutableList<Item> = mutableListOf()
+    
+    fun addItem(item: Item): Order {
+        orderItem.add(item)
+        return this
+    }
+    
+    fun addItems(items: List<Item>): Order {
+        orderItem.addAll(items)
+        return this
+    }
+    
+    fun print() {
+        println("Order Number: #" + orderNumber)
+        var total = 0
+        for (item in orderItem) {
+            println("${item.name}: $" + item.price)
+            total += item.price
+        }
+        println("Total: $$total")
+        println()
+    }
+}
+
+open class Item(val name: String, val price: Int)
+
+class Noodles : Item("Noodles", 10) {
+    override fun toString(): String {
+        return name
+    }
+}
+
+class Vegetables(vararg val toppings: String) : Item("Vegetables", 5) {
+    override fun toString(): String {
+        return name + " " + toppings.joinToString()
+    }
+}
+
+fun main() {
+    val ordersList = mutableListOf<Order>()
+
+    // Add an item to an order
+    val order1 = Order(1)
+    order1.addItem(Noodles())
+    ordersList.add(order1)
+
+    // Add multiple items individually
+    val order2 = Order(2)
+    order2.addItem(Noodles())
+    order2.addItem(Vegetables())
+    ordersList.add(order2)
+
+    // Add a list of items at one time
+    val order3 = Order(3)
+    val items = listOf(Noodles(), Vegetables("Carrots", "Beans", "Celery"))
+    order3.addAll(items)
+    ordersList.add(order3)
+
+    // Use builder pattern
+    val order4 = Order(4)
+        .addItem(Noodles())
+        .addItem(Vegetables("Cabbage", "Onion"))
+    ordersList.add(order4)
+
+    // Create and add order directly
+    ordersList.add(
+        Order(5)
+            .addItem(Noodles())
+            .addItem(Noodles())
+            .addItem(Vegetables("Spinach"))
+    )
+
+    // Print out each order
+    for (order in ordersList) {
+        order.print()
+        println()
+    }
+}
+// The addItem() method returns the same Order instance (with the new state), and you can call addItem() again on it with vegetables. 
