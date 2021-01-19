@@ -152,3 +152,42 @@ android {
    ...
 }
 */
+
+// ✅ RecyclerView
+// The greatest benefit of RecyclerView is that it is very efficient for large lists:
+// When an item scrolls off the screen, the item's views are recycled. That means the item is filled with new content as it scrolls onto the screen.
+// adapter: RecyclerView uses an adapter to transform app data into something the RecyclerView can display, without changing how the app stores and processes the data.
+
+// ✔ To display your data in a RecyclerView, you need the following parts:
+// ◽ Data to display.
+
+// ◽ A RecyclerView instance defined in your layout file, to act as the container for the views.
+
+// ◽ A layout for one item of data. If all the list items look the same, you can use the same layout for all of them, but that is not mandatory. 
+// - The item layout has to be created separately from the fragment's layout, so that one item view at a time can be created and filled with data.
+// - Because this view is displayed inside the RecyclerView, you don't have to place the view inside a ViewGroup.
+
+// ◽ A layout manager. The layout manager handles the organization (the layout) of UI components in a view.
+// - Every RecyclerView needs a layout manager that tells it how to position items in the list. 
+// - Android provides a LinearLayoutManager, which by default lays out the items in a vertical list of full width rows.
+
+// ◽ A view holder. 
+// - The view holder extends the ViewHolder class. It contains the view information for displaying one item from the item's layout. View holders also add information that RecyclerView uses to efficiently move views around the screen.
+
+// ◽ An adapter. The adapter connects your data to the RecyclerView. It adapts the data so that it can be displayed in a ViewHolder. A RecyclerView uses the adapter to figure out how to display the data on the screen.
+// - The adapter creates a view holder and fills it with data for the RecyclerView to display.
+// - At the top level of Adapter, create a listOf  variable to hold the data.
+// - The RecyclerView needs to know how many items the adapter has for it to display, and it does that by calling getItemCount()
+// - The onBindViewHolder()function is called by RecyclerView to display the data for one list item at the specified position. So the onBindViewHolder() method takes two arguments: a view holder, and a position of the data to bind. 
+
+// - override and implement onCreateViewHolder(), which is called when the RecyclerView needs a view holder.
+// => This function takes two parameters and returns a ViewHolder. The parent parameter, which is the view group that holds the view holder, is always the RecyclerView. The viewType parameter is used when there are multiple views in the same RecyclerView.
+// => For example, if you put a list of text views, an image, and a video all in the same RecyclerView, the onCreateViewHolder() function would need to know what type of view to use.
+// => In onCreateViewHolder(), create an instance of LayoutInflater.
+// => The layout inflater knows how to create views from XML layouts. The context contains information on how to correctly inflate the view. In an adapter for a recycler view, you always pass in the context of the parent view group, which is the RecyclerView.
+// ex. val adapterLayout = LayoutInflater.from(parent.context).inflate(R.layout.list_item, parent, false)
+// => Pass in the XML layout for the view, and the parent view group for the view. The third, boolean, argument is attachToRoot. This argument needs to be false, because RecyclerView adds this item to the view hierarchy for you when it's time.
+// => In onCreateViewHolder(), return a TextItemViewHolder made with view(adapterLayout)
+// - The RecyclerView needs to know about the adapter to use to get view holders.
+
+// N O T E : Because these view holders are recycled, make sure onBindViewHolder() sets or resets any customizations that previous items might have set on a view holder.
