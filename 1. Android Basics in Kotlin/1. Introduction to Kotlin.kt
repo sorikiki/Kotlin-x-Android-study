@@ -707,3 +707,109 @@ fun main() {
     }
 }
 // The addItem() method returns the same Order instance (with the new state), and you can call addItem() again on it with vegetables. 
+
+// ✅ Collections
+//: A collection is a group of related items, like a list of words, or a set of employee records.
+// The collection can have the items ordered or unordered, and the items can be unique or not. 
+// => You've already learned about one type of collection, lists. Lists have an order to the items, but the items don't have to be unique.
+// As with lists, Kotlin distinguishes between mutable and immutable collections. Kotlin provides numerous functions for adding or deleting items, viewing, and manipulating collections.
+
+// ✅ Set: unordered, unique vs list: ordered, ununique
+// => both mutable and immutable are available. 
+// Another type of collection in Kotlin is a set. It's a group of related items, but unlike a list, there can't be any duplicates, and the order doesn't matter. 
+val set1 = setOf(1,2,3)
+val set2 = mutableSetOf(3,2,1)
+println("$set1 == $set2: ${set1 == set2}") // [1, 2, 3] == [3, 2, 1]: true
+// => Even though one is mutable and one isn't, and they have the items in a different order, they're considered equal because they contain exactly the same set of items.
+
+// ◽ One of the main operations you might perform on a set is checking if a particular item is in the set or not with the contains() function.
+println("contains 7: ${setOfNumbers.contains(7)}") // contains 7: false
+
+// ◽ As with mathematical sets, in Kotlin you can also perform operations like the intersection (∩) or the union (∪) of two sets, using intersect() or union().
+fun main() {
+    val set1 = setOf(1, 2, 3)
+    val set2 = mutableSetOf(3, 4, 5)
+    println(set1.union(set2)) // [1, 2, 3, 4, 5]
+    println(set1.intersect(set2)) // [3]
+}
+
+// ✅ Map (= dictionary)
+// : A map is a set of key-value pairs, designed to make it easy to look up a value given a particular key.
+// => Keys are unique, and each key maps to exactly one value, but the values can have duplicates. 
+// => Values in a map can be strings, numbers, or objects—even another collection like a list or a set.
+fun main() {
+    val peopleAges = mutableMapOf<String, Int>(
+        "Fred" to 30,
+        "Ann" to 23
+    )
+    println(peopleAges)
+    // {Fred=30, Ann=23}
+
+    // To add more entries to the map, you can use the put() function, passing in the key and the value:
+    peopleAges.put("Barbara", 42)
+    // You can also use a shorthand notation to add entries:
+    peopleAges["Joe"] = 51
+    println(peopleAges)
+    // {Fred=30, Ann=23, Barbara=42, Joe=51}
+}  
+// => This creates a mutable map of a String (key) to an Int (value), initializes the map with two entries, and prints the items.
+
+// As noted above, the keys (names) are unique, but the values (ages) can have duplicates.
+// => What do you think happens if you try to add an item using one of the same keys?
+peopleAges["Fred"] = 31
+// {Fred=31, Ann=23, Barbara=42, Joe=51}
+
+
+// ✅ Several Useful Funcionts
+// ◽ forEach
+// : forEach, which goes through all the items for you and performs an operation on each one.
+peopleAges.forEach { print("${it.key} is ${it.value}, ") }
+// => It's similar to the for loop, but a little more compact. Instead of you specifying a variable for the current item, the forEach uses the special identifier it.
+// => Note that you didn't need to add parentheses when you called the forEach() method, just pass the code in curly braces {}.
+// Fred is 31, Ann is 23, Barbara is 42, Joe is 51,
+// => at the end, there's an unnecessary comma.
+
+// ◽ map
+// : The map() function (which shouldn't be confused with a map or dictionary collection above) applies a transformation to each item in a collection.
+// => Note that you didn't need to add parentheses when you called the forEach() method, just pass the code in curly braces {}.
+println(peopleAges.map { "${it.key} is ${it.value}" }.joinToString(", ") ) // Fred is 31, Ann is 23, Barbara is 42, Joe is 51
+// => It has the correct output, and no extra comma! 🤔
+// => joinToString(", ") adds each item in the transformed collection to a string, separated by , and it knows not to add it to the last item 😊
+// 1. peopleAges.map applies a transformation to each item in peopleAges and creates a new collection of the transformed items(no parentheses)
+// 2. The part in the curly braces {} defines the transformation to apply to each item. The transformation takes a key value pair and transforms it into a string, for example <Fred, 31> turns into Fred is 31.
+// 3. joinToString(", ") adds each item in the transformed collection to a string, separated by , and it knows not to add it to the last item
+// 4. all this is chained together with . (dot operator), like you've done with function calls and property accesses in earlier codelabs
+
+// ◽ filter
+// : The filter() function returns the items in a collection that match, based on an expression.
+val filteredNames = peopleAges.filter { it.key.length < 4 }
+println(filteredNames)
+// => Again note that the call to filter doesn't need parentheses, and it refers to the current item in the list.
+// {Ann=23, Joe=51}
+
+
+// ✅ Lambdas: a function with no name that can immediately be used as an expression
+// 1. Kotlin has something called function types, where you can define a specific type of function based on its input parameters and return value
+(Int) -> Int
+// 2. For the syntax of a lambda expression, the parameters come first, followed by the function arrow, and followed by the function body. The last expression in the lambda is the return value.
+a: Int -> a*3
+
+fun main() {
+    val triple: (Int) -> Int = { a: Int -> a * 3 }
+    println(triple(5))
+}
+// 15
+
+// + Note: It's common to have a lambda that has a single parameter, so Kotlin offers a shorthand. Kotlin implicitly uses the special identifier it for the parameter of a lambda with a single parameter.
+val triple: (Int) -> Int = { it * 3 }
+
+// ✅ Higher-order functions
+// : This just means passing a function (in this case a lambda) to another function, or returning a function from another function.
+// => it turns out that map, filter, and forEach functions are all examples of higher-order functions because they all took a function as a parameter.
+// => In the lambda passed to this filter higher-order function, it's okay to omit the single parameter and arrow symbol, and also use the it parameter.
+peopleAges.filter { it.key.length < 4 }
+
+// if you wanted to sort the list by the length of the strings, you need to write some code to get the length of two strings and compare them. Kotlin lets you do this by passing a lambda to the sortedWith() method.
+println(peopleNames.sortedWith { str1: String, str2: String -> str1.length - str2.length })
+// => To compare two objects for sorting, the convention is to return a value less than 0 if the first object is less than the second, 0 if they are equal, and a value greater than 0 if the first object is greater than the second.
+// => By doing a series of comparison between two Strings at a time, the sortedWith() function outputs a list where the names will be in order of increasing length.

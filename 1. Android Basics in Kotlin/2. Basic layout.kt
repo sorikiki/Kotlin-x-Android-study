@@ -191,3 +191,4 @@ android {
 // - The RecyclerView needs to know about the adapter to use to get view holders.
 
 // N O T E : Because these view holders are recycled, make sure onBindViewHolder() sets or resets any customizations that previous items might have set on a view holder.
+// => we'll deal with this issue later.
