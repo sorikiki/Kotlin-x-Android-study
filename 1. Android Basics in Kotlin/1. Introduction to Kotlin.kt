@@ -813,3 +813,31 @@ peopleAges.filter { it.key.length < 4 }
 println(peopleNames.sortedWith { str1: String, str2: String -> str1.length - str2.length })
 // => To compare two objects for sorting, the convention is to return a value less than 0 if the first object is less than the second, 0 if they are equal, and a value greater than 0 if the first object is greater than the second.
 // => By doing a series of comparison between two Strings at a time, the sortedWith() function outputs a list where the names will be in order of increasing length.
+// => Likewise, we need twe parameters(str1, str2), not just one, so we cannot use 'it' keyword.
+// cf. It returns a new sorted list, not modify the original list.
+
+// ✅ SAM(Single Abstract Method) conversion
+// Long version
+calculateButton.setOnClickListener{object: View.OnClickListener {
+    override fun onClick(view: View?) {
+        calculateTip()
+    }
+}}
+// : Kotlin converts the lambda into an OnClickListener object which implements the single abstract method onClick(). 
+// You just need to make sure the lambda function type matches the function type of the abstract function.
+// Short version
+calculateButton.setOnClickListener { view -> calculateTip() }
+// Since the view parameter is never used in the lambda, the parameter can be omitted.
+calculateButton.setOnClickListenr { calculateTip() }
+
+// ✅ Example: pick a series of words which starts with a specific word.
+fun main() {
+    val words = listOf("about", "acute", "awesome", "balloon", "best", "brief", "class", "coffee", "creative")
+    val filteredWords = words.filter { it.startsWith("b", ignoreCase = true) }
+        .shuffled()
+        .take(2)
+        .sorted()
+    println(filteredWords)
+}
+// ✔ startsWith(): It returns true if a string starts with the specified string. You can also tell it to ignore case, so "b" will match "b" or "B".
+// ✔ shuffled(): make a copy of a collection with the items randomly shuffled.
