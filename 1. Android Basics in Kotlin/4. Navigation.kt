@@ -91,3 +91,83 @@ companion object {
     ACTION_SET_ALARM – setting an alarm in the background
     ACTION_DIAL – initiating a phone call
 */
+
+// ✅ Activity Lifecycle
+// : The activity lifecycle is the set of states an activity can be in during its lifetime. 
+// => The lifecycle extends from when the activity is initially created to when it is destroyed and the system reclaims that activity's resources. 
+// => As a user navigates between activities in your app (and into and out of your app), those activities each transition between different states in the activity lifecycle.
+
+// the Activity class itself, and any subclasses of Activity such as AppCompatActivity, implement a set of lifecycle callback methods. 
+// Android invokes these callbacks when the activity moves from one state to another, and you can override those methods in your own activities to perform tasks in response to those lifecycle state changes.
+
+// cf. The Log class writes messages to the Logcat. The Logcat is the console for logging messages.
+//     + the Log.d() method writes a debug message. Other methods in the Log class include Log.i() for informational messages, Log.e() for errors, Log.w() for warnings, or Log.v() for verbose messages.
+// ex. Log.d("MainActivity", "onCreate Called")  
+//     + The log tag (the first parameter), in this case "MainActivity". The tag is a string that lets you more easily find your log messages in the Logcat. The tag is typically the name of the class.
+//     + The actual log message (the second parameter), is a short string, which in this case is "onCreate called".
+// Note: A good convention is to declare a TAG constant in your class:
+/*  'A compile-time constant' is a value that won't change. Use const before a variable declaration to mark it as a compile-time constant.
+    const val TAG = "MainActivity"
+
+    and use that in subsequent calls to the log methods, like below:
+
+    Log.d(TAG, "onCreate Called")
+*/
+
+// ◽ onCreate()
+// : The onCreate() method is where you should do any one-time initializations for your activity. 
+// For example, in onCreate() you inflate the layout, define click listeners, or set up view binding.
+// After onCreate() executes, the activity is considered created.
+// you must call the superclass implementation to complete the creation of the Activity, so within it, you must immediately call super.onCreate(). The same is true for other lifecycle callback methods.
+
+// ◽ onStart()
+// : The onStart() lifecycle method is called just after onCreate(). 
+// After onStart() runs, your activity is visible on the screen. 
+// Unlike onCreate(), which is called only once to initialize your activity, onStart() can be called many times in the lifecycle of your activity.
+// Note that onStart() is paired with a corresponding onStop() lifecycle method. If the user starts your app and then returns to the device's home screen, the activity is stopped and is no longer visible on screen.
+
+// When an activity starts from scratch, you see all three of these lifecycle callbacks called in order:
+// - onCreate() to create the app.
+// - onStart() to start it and make it visible on the screen.
+// - onResume() to give the activity focus and make it ready for the user to interact with it.
+// cf. Despite the name, the onResume() method is called at startup, even if there is nothing to resume.
+
+// When onPause() is called, the app no longer has focus. 
+// After onStop(), the app is no longer visible on screen. 
+// Although the activity has been stopped, the Activity object is still in memory, in the background. The activity has not been destroyed. 
+// The user might return to the app, so Android keeps your activity resources around.
+
+// ✅ Configuration change
+// :it happens when the state of the device changes so radically that the easiest way for the system to resolve the change is to completely shut down and rebuild the activity.
+// ex. if the user changes the device language, the whole layout might need to change to accommodate different text directions and string lengths. If the user plugs the device into a dock or adds a physical keyboard, the app layout may need to take advantage of a different display size or layout. 
+//     And if the device orientation changes—if the device is rotated from portrait to landscape or back the other way—the layout may need to change to fit the new orientation. 
+
+// Notice that when the device or emulator rotates the screen, the system calls all the lifecycle callbacks to shut down the activity. Then, as the activity is re-created, the system calls all the lifecycle callbacks to start the activity.
+// When the device is rotated and the activity is shut down and re-created, the activity starts up with default values—the number of desserts sold and the revenue have reset to zeroes.🤔
+
+// ✅ Use onSaveInstanceState() to save bundle data
+// : The onSaveInstanceState() method is a callback you use to save any data that you might need if the Activity is destroyed.
+// In the lifecycle callback diagram, onSaveInstanceState() is called after the activity has been stopped.
+override fun onSaveInstanceState(outState: Bundle) {
+   super.onSaveInstanceState(outState)
+
+   Log.d(TAG, "onSaveInstanceState Called")
+   outState.putInt(KEY_REVENUE, revenue)
+   outState.putInt(KEY_DESSERT_SOLD, dessertsSold)
+}
+// A Bundle is a collection of key-value pairs, where the keys are always strings. You can put simple data, such as Int and Boolean values, into the bundle.
+// The size of this bundle is also limited, though the size varies from device to device. If you store too much data, you risk crashing your app with the TransactionTooLargeException error. 
+// In onSaveInstanceState(), put the revenue value (an integer) into the bundle with the putInt() method:
+
+// The Activity state can be restored in onCreate(Bundle) or onRestoreInstanceState(Bundle) (the Bundle populated by onSaveInstanceState() method will be passed to both lifecycle callback methods).
+override fun onCreate(savedInstanceState: Bundle) {
+// Notice that onCreate() gets a Bundle each time it is called. When your activity is restarted due to a process shut down, the bundle that you saved is passed to onCreate(). If your activity was starting fresh, this Bundle in onCreate() is null. So if the bundle is not null, you know you're "re-creating" the activity from a previously known point.
+/*
+    Note: If the activity is being re-created, the onRestoreInstanceState() callback is called after onStart(), also with the bundle. Most of the time, you restore the activity state in onCreate(). But because onRestoreInstanceState() is called after onStart(), if you ever need to restore some state after onCreate() is called, you can use onRestoreInstanceState().
+ */
+if (savedInstanceState != null) {
+   revenue = savedInstanceState.getInt(KEY_REVENUE, 0)
+}
+// about 'getInt()' method
+// first parameter: A string that acts as the key, for example "key_revenue" for the revenue value.
+// second parameter: A default value in case no value exists for that key in the bundle.

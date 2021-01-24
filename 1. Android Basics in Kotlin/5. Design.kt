@@ -136,6 +136,10 @@ class MainActivity : AppCompatActivity() {
 
 // - onCreateOptionsMenu: where you inflate the options menu and perform any additional setup
 // - onOptionsItemSelected: where you'll actually call chooseLayout() when the button is selected.
+
+// + onCreateOptionsMenu: Initialize the contents of the Activity's standard options menu. This is only called once, the first time the options menu is displayed.
+// + onOptionsItemsSelected: This hook is called whenever an item in your options menu is selected. The default implementation simply returns false to have the normal processing happen (calling the item's Runnable or sending a message to its Handler as appropriate).  
+
 override fun onCreateOptionsMenu(menu: Menu?): Boolean {
    menuInflater.inflate(R.menu.layout_menu, menu)
 
