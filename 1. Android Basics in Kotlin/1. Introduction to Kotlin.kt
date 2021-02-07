@@ -760,7 +760,7 @@ peopleAges["Fred"] = 31
 // {Fred=31, Ann=23, Barbara=42, Joe=51}
 
 
-// ✅ Several Useful Funcionts
+// ✅ Several Useful Functions
 // ◽ forEach
 // : forEach, which goes through all the items for you and performs an operation on each one.
 peopleAges.forEach { print("${it.key} is ${it.value}, ") }

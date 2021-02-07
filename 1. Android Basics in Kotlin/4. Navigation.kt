@@ -171,3 +171,160 @@ if (savedInstanceState != null) {
 // about 'getInt()' method
 // first parameter: A string that acts as the key, for example "key_revenue" for the revenue value.
 // second parameter: A default value in case no value exists for that key in the bundle.
+
+// ✅ Fragment
+// : A fragment is simply a reusable piece of your app's user interface. 
+// Like activities, fragments have a lifecycle and can respond to user input.
+// A fragment is always contained within the view hierarchy of an activity when it is shown onscreen.
+// Due to their emphasis on reusability and modularity, it's even possible for multiple fragments to be hosted simultaneously by a single activity.
+
+// ◽ Fragment Lifecycle
+// The fragment lifecycle has five states.
+// - INITIALIZED: A new instance of the fragment has been instantiated.
+// - CREATED: The first fragment lifecycle methods are called. During this state, the view associated with the fragment is also created.
+// - STARTED: The fragment is visible onscreen but does not have "focus", meaning it can't respond to user input.
+// - RESUMED: The fragment is visible and has focus.
+// - DESTROYED: The fragment object has been de-instantiated.
+// Also similar to activities, the Fragment class provides many methods that you can override to respond to lifecycle events.
+// - onCreate(): The fragment has been instantiated and is in the CREATED state. However, it's corresponding view has not been created yet.
+// - onCreateView(): This method is where you inflate the layout. The fragment has entered the CREATED state.
+// - onViewCreated(): This is called after the view is created. In this method, you would typically bind specific views to properties by calling findViewById().
+// - onStart(): The fragment has entered the STARTED state.
+// - onResume(): The fragment has entered the RESUMED state and now has focus (can respond to user input).
+// - onPause(): The fragment has re-entered the STARTED state. The UI is visible to the user
+// - onStop(): The fragment has re-entered the CREATED state. The object is instantiated but is no longer presented on screen.
+// - onDestroyView(): Called right before the fragment enters the DESTROYED state. The view has already been removed from memory, but the fragment object still exists.
+// - onDestroy(): The fragment enters the DESTROYED state.
+
+/*
+    The lifecycle states and callback methods are quite similar to those used for activities. However, keep in mind the difference with the onCreate() method. 
+    With activities, you would use this method to inflate the layout and bind views. 
+    However, in the fragment lifecycle, onCreate() is called before the view is created, so you can't inflate the layout here. 
+    Instead, you do this in onCreateView(). 
+    Then, after the view has been created, the onViewCreated() method is called, where you can then bind properties to specific views. 
+*/
+
+// ◽ What are different from Activity in .kt?
+// 1. the way to set view binding
+// 2. contents in onCreateOptionsMenu()
+/* 
+    The only other thing to note is there are some subtle differences with the onCreateOptionsMenu() method when working with fragments. 
+    While the Activity class has a global property called menuInflater, Fragment does not have this property. 
+    The menu inflater is instead passed into onCreateOptionsMenu(). 
+    Also note that the onCreateOptionsMenu() method used with fragments doesn't require a return statement. 
+    Implement the method as shown:
+*/
+// 3. unlike an activity, a fragment is not a Context
+// => You can't pass in this (referring to the fragment object) as the layout manager's context. However, fragments provide a context property you can use instead. The rest of the code is identical to MainActivity.
+
+// 4. Fragments don't have direct access to the intent, you need to reference it with activity.intent
+// => as there's no guarantee the activity exists earlier in the lifecycle, 'activity?.intent?.extras?.getString(LETTER).toString()' should be implemented.
+
+// When all the functionality has been moved to LetterListFragment, all the MainActivity class needs to do is inflate the layout so that the fragment is displayed in the view. 
+
+// ✅ JetPack Navigation Component
+// : Android Jetpack provides the Navigation component to help you handle any navigation implementation, simple or complex, in your app, particulary between fragments.
+// The Navigation component has three key parts which you'll use to implement navigation in the Words app
+
+// ◽ Navigation Graph
+/*
+    The navigation graph is an XML file that provides a visual representation of navigation in your app. 
+    The file consists of destinations which correspond to individual activities and fragments as well as actions between them which can be used in code to navigate from one destination to another. 
+    Just like with layout files, Android Studio provides a visual editor to add destinations and actions to the navigation graph 
+    => destinations from the navigation graph are displayed to the user by the FragmentContainerView.
+*/
+
+// ◽ NavHost: MainActivity.kt has role about this to contain a FragmentContainerView to act as the NavHost for your fragments.
+/*
+    NavHost: A NavHost is used to display destinations form a navigation graph within an activity. 
+    When you navigate between fragments, the destination shown in the NavHost is updated. 
+    You'll use a built-in implementation, called NavHostFragment, in your MainActivity.
+ */
+
+//  ◽ NavController
+/*
+    NavController: The NavController object lets you control the navigation between destinations displayed in the NavHost. 
+    When working with intents, you had to call startActivity to navigate to a new screen. 
+    With the Navigation component, you can call the NavController's navigate() method to swap the fragment that's displayed. 
+    The NavController also helps you handle common tasks like responding to the system "up" button to navigate back to the previously displayed fragment.
+ */
+
+// ✅ Store data in Viewmodel
+// You could resolve 'data lost' issue using the onSaveInstanceState() callback. 
+// => However, using the onSaveInstanceState() method requires you to write extra code to save the state in a bundle, and to implement logic to retrieve that state. 
+// => Also, the amount of data that can be stored is minimal.
+// ✨ You can resolve these issues using the Android Architecture components that you learn about in this pathway.
+
+// 🙌 Learn about App architecture
+// The most common architectural principles are: separation of concerns and driving UI from a model.
+// 1. separation of concerns: the app should be divided into classes, each with separate responsibilities.
+// 2. driving UI from model: Models are components that are responsible for handling the data for an app. They're independent from the Views and app components in your app, so they're unaffected by the app's lifecycle and the associated concerns.
+// => Instead, the decision-making logic about the data should be added in your ViewModel.
+
+// cf. The main classes or components in Android Architecture are UI Controller (activity/fragment), ViewModel, LiveData and Room.
+// => You'll learn LiveData and Room later.
+// => In your Unscramble app, the decision-making code such as figuring out the next scrambled word, and calculations of score and word count should be in your ViewModel.
+
+// summary: UI Controller displays data and capture user events, and ViewModel holds all data needed for the UI and prepares it for display.
+// our app structure: MainActivity.kt -> GameFragment.kt -> GameViewModel.kt
+
+// 🤔 Property delegation
+// Property delegation in Kotlin helps you to handoff the getter-setter responsibility to a different class.
+// => This class (called delegate class) provides getter and setter functions of the property and handles its changes.
+// Syntax for property delegation
+var <property-name> : <property-type> by <delegate-class>()
+
+// Below, the app will lose the state of the viewModel reference when the device goes through a configuration change. 
+private val viewModel = GameViewModel()
+
+// Instead, use the property delegate approach and delegate the responsibility of the viewModel object to a separate class called viewModels. 
+// The delegate class creates the viewModel object for you on the first access, and retains its value through configuration changes and returns the value when requested.
+private val viewModel: GameViewModel by viewModels()
+
+// 🤔 Backing property
+// issue: Inside the ViewModel, the data should be editable, so they should be private and var. From outside the ViewModel, data should be readable, but not editable, so the data should be exposed as public and val.
+// => To achieve this behavior, Kotlin has a feature called a backing property.
+
+// for every property, the Kotlin framework generates getters and setters.
+// For getter and setter methods, you could override one or both of these methods and provide your own custom behavior. 
+// Declare private mutable variable that can only be modified
+// within the class it is declared.
+private var _count = 0 
+
+// Declare another public immutable field and override its getter method. 
+// Return the private property's value in the getter method.
+// When count is accessed, the get() function is called and
+// the value of _count is returned. 
+// Since only the get() method is being overridden, this property is immutable and read-only. When an outside class accesses this property, it returns the value of _count and its value can't be modified. 
+val count: Int
+   get() = _count
+
+// summary: Never expose mutable data fields from your ViewModel—make sure this data can't be modified from another class. Mutable data inside the ViewModel should always be private.
+
+// 🤔 The Lifecycle of ViewModel
+// The framework keeps the ViewModel alive as long as the scope of the activity or fragment is alive. 
+// A ViewModel is not destroyed if its owner is destroyed for a configuration change, such as screen rotation. 
+// The new instance of the owner reconnects to the existing ViewModel instance, as illustrated by the following diagram:
+
+// 🤔 Array
+// An Array is similar to List, but it has a fixed size when it's initialized. 
+// An Array cannot expand or shrink its size (you need to copy an array to resize it) whereas a List has add() and remove() functions, so that it can increase and decrease in size.
+
+// 🤔 Dialog
+// A dialog is a small window (screen) that prompts the user to make a decision or enter additional information.
+// Normally a dialog does not fill the entire screen, and it requires users to take an action before they can proceed.
+// Android provides different types of Dialogs. 
+// In this codelab, you learn about Alert Dialogs.
+// => 'Alert Dialogs' consists of 'Title (optional)','Message','Text buttons'
+
+// 🤔 Trailing lambda syntax
+    ...
+    .setNegativeButton(getString(R.string.exit)) { _, _ ->
+        exitGame()
+    }
+    .setPositiveButton(getString(R.string.play_again)) { _, _ ->
+        restartGame()
+    }
+// => this syntax may be new to you, but this is shorthand for setNegativeButton(getString(R.string.exit), { _, _ -> exitGame()}) where the setNegativeButton() method takes in two parameters: a String and a function, DialogInterface.OnClickListener() which can be expressed as a lambda. 
+// => When the last argument being passed in is a function, you could place the lambda expression outside the parentheses. 
+// => Both ways of writing the code (with the lambda inside or outside the parentheses) is acceptable.
