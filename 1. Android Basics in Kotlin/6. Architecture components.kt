@@ -126,3 +126,67 @@ android:padding="@{@dimen/largePadding}"
 android:text="@{@string/example_resource(user.lastName)}"
 
 // summary: You have learned how to use LiveData with LiveData observers and LiveData with binding expressions.
+
+// 🤔 apply()
+// : It forms a temporary scope, and in that scope, you can access the object without its name. 
+// => Such calls can be read as "apply the following assignments to the object."
+clark.apply {
+    firstName = "Clark"
+    lastName = "James"
+    age = 18
+}
+
+// cf. when you want to bind the fragment data variable with the fragment instance..
+// => You will use 'this' keyword differently here, because inside the binding?.apply block, the keyword this refers to the binding instance, not the fragment instance. Use @ and explicitly specify the fragment class name.
+// for example this@FlavorFragment. 
+ binding?.apply {
+        lifecycleOwner = viewLifecycleOwner
+        viewModel = sharedViewModel
+        flavorFragment = this@FlavorFragment
+    }
+
+// The equivalent code without apply scope function would look like the following.
+
+clark.firstName = "Clark"
+clark.lastName = "James"
+clark.age = 18
+
+// 💥 Important
+// Directly binding a property to an attribute works well when the view model’s type matches the attribute type. Unfortunately, this isn’t always the case.
+/* 
+<TextView
+                    android:id="@+id/quantity"
+                    style="@style/Widget.Cupcake.TextView.OrderSummary"
+                    />
+                <!-- Directly binding a property to an attribute works well when the view model’s type matches the attribute type.  -->
+                ❗   android:text="@{viewModel.quantity.toString()}"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/order_summary_margin"
+                    tools:text="6 cupcakes" />
+                    */
+
+// ✅ Shared ViewModel: our best example 'CupCake App' 💕
+// : You will use the activity instance instead of the fragment instance,
+// => That means the view model can be shared across fragments. Each fragment could access the view model to check on some detail of the order or update some data in the view model.
+
+// 🤔 Delegate Class
+// To use the shared view model in StartFragment you will initialize the OrderViewModel using activityViewModels() instead of viewModels() delegate class.
+// ◽ viewModels() gives you the ViewModel instance scoped to the current fragment. This will be different for different fragments.
+// ◽ activityViewModels() gives you the ViewModel instance scoped to the current activity. Therefore the instance will remain the same across multiple fragments in the same activity.
+
+// 🤔 Listener Bindings
+// : Listener bindings are lambda expressions that run when an event happens, such as an onClick event.
+
+// 🤔 Date Formatter
+// : The Android framework provides a class called SimpleDateFormat, which is a class for formatting and parsing dates in a locale-sensitive manner. It allows for formatting (date → text) and parsing (text → date) of dates.
+// => You will use the method Locale.getDefault() to retrieve the locale information set on the user's device and pass it into the SimpleDateFormat constructor.
+// => Locale in Android is a combination of language and country code. The language codes are two-letter lowercase ISO language codes, such as "en" for english. The country codes are two-letter uppercase ISO country codes, such as "US" for the United States.
+
+// 🤔 The Elvis operator ?:
+private fun updatePrice() {
+    _price.value = (quantity.value ?: 0) * PRICE_PER_CUPCAKE
+}
+// The elvis operator (?:) means that if the expression on the left is not null, then use it. 
+// Otherwise if the expression on the left is null, then use the expression to the right of the elvis operator (which is 0 in this case).
+
