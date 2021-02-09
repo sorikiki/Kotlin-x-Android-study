@@ -190,3 +190,35 @@ private fun updatePrice() {
 // The elvis operator (?:) means that if the expression on the left is not null, then use it. 
 // Otherwise if the expression on the left is null, then use the expression to the right of the elvis operator (which is 0 in this case).
 
+// ✅ Tasks and BackStack
+// : A task is a collection of activities that the user interacts with when performing a certain job (i.e. checking email, creating a cupcake order, taking a photo).
+// : Activities are arranged in a stack, known as a back stack, where each new activity the user visits gets pushed onto the back stack for the task.
+// => The activity on the top of the stack is the current activity the user is interacting with. The activities below it on the stack have been put in the background and have been stopped.
+// => The activities below it on the stack have been put in the background and have been stopped.
+
+// ✨ The back stack is useful for when the user wants to navigate backwards. 
+// => By tapping the Up or Back button, you can pop destinations off the back stack.
+// => Android can remove the current activity from the top of the stack, destroy it, and start the activity underneath it again.
+// => If the user wants to go back multiple times, Android will keep popping the activities off the top of the stack until you get closer to the bottom of the stack.
+// => When there are no more activities in the backstack, the user is brought back to the launcher screen of the device (or to the app that launched this one).
+// => In the same way that the back stack can keep track of activities that have been opened by the user, the back stack can also track the fragment destinations the user has visited with the help of the Jetpack Navigation component.
+// => The Navigation library allows you to pop a fragment destination off the back stack each time the user hits the Back button. This default behavior comes for free, without you needing to implement any of it.
+
+// 🤔 Handle Navigation Bug related with Back Stack
+// => From the SummaryFragment, you cancelled the order. When you navigated via the action from SummaryFragment to StartFragment, Android added another instance of StartFragment as a new destination on the back stack.
+// => That is why when you tapped the Back button from the StartFragment, the app ended up showing the SummaryFragment again (with blank order information).
+// => Pop additional destinations off the back stack !
+// => How to do this?
+// : By including an app:popUpTo attribute on the navigation action in the navigation graph, more than one destination can be popped off the back stack up until that specified destination is reached.
+// => since you are navigating to StartFragment, Android actually adds StartFragment as a new destination on the back stack, so now you have 2 instances of StartFragment on the back stack. Hence, you need to tap the Back button twice to exit the app.
+// : Do this by specifying app:popUpTo="@id/startFragment" and app:popUpToInclusive="true" on the appropriate navigation actions. That way, you will only have the one new instance of StartFragment in the back stack. 
+
+// 🤔 Quantity Strings
+// : By declaring a plurals resource, you can specify different string resources to use based on what the quantity is, for example in the singular or plural case.
+// strings.xml
+<plurals name="cupcakes">
+    <item quantity="one">%d cupcake</item>
+    <item quantity="other">%d cupcakes</item>
+</plurals>
+// In the singular case (quantity="one"), the singular string will be used. In all other cases (quantity="other"), the plural string will be used. 
+// Note that instead of %s which expects a string argument, %d expects an integer argument, which you will pass in when you format the string.
