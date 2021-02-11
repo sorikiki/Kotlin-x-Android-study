@@ -151,7 +151,6 @@ companion object {
 override fun onSaveInstanceState(outState: Bundle) {
    super.onSaveInstanceState(outState)
 
-   Log.d(TAG, "onSaveInstanceState Called")
    outState.putInt(KEY_REVENUE, revenue)
    outState.putInt(KEY_DESSERT_SOLD, dessertsSold)
 }
@@ -159,15 +158,20 @@ override fun onSaveInstanceState(outState: Bundle) {
 // The size of this bundle is also limited, though the size varies from device to device. If you store too much data, you risk crashing your app with the TransactionTooLargeException error. 
 // In onSaveInstanceState(), put the revenue value (an integer) into the bundle with the putInt() method:
 
-// The Activity state can be restored in onCreate(Bundle) or onRestoreInstanceState(Bundle) (the Bundle populated by onSaveInstanceState() method will be passed to both lifecycle callback methods).
+// The Activity state can be restored in onCreate(Bundle) or onRestoreInstanceState(Bundle) 
+// (the Bundle populated by onSaveInstanceState() method will be passed to both lifecycle callback methods).
 override fun onCreate(savedInstanceState: Bundle) {
-// Notice that onCreate() gets a Bundle each time it is called. When your activity is restarted due to a process shut down, the bundle that you saved is passed to onCreate(). If your activity was starting fresh, this Bundle in onCreate() is null. So if the bundle is not null, you know you're "re-creating" the activity from a previously known point.
+    if (savedInstanceState != null) {
+        revenue = savedInstanceState.getInt(KEY_REVENUE, 0)
+    }
+}   
+// Notice that onCreate() gets a Bundle each time it is called. 
+// When your activity is restarted due to a process shut down, the bundle that you saved is passed to onCreate(). 
+// If your activity was starting fresh, this Bundle in onCreate() is null. So if the bundle is not null, you know you're "re-creating" the activity from a previously known point.
 /*
     Note: If the activity is being re-created, the onRestoreInstanceState() callback is called after onStart(), also with the bundle. Most of the time, you restore the activity state in onCreate(). But because onRestoreInstanceState() is called after onStart(), if you ever need to restore some state after onCreate() is called, you can use onRestoreInstanceState().
  */
-if (savedInstanceState != null) {
-   revenue = savedInstanceState.getInt(KEY_REVENUE, 0)
-}
+
 // about 'getInt()' method
 // first parameter: A string that acts as the key, for example "key_revenue" for the revenue value.
 // second parameter: A default value in case no value exists for that key in the bundle.
