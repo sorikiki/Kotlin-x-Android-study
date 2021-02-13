@@ -12,4 +12,3 @@
 // ◽ Databases in general
 // ◽ SQL databases in particular
 // ◽ The SQL language used to interact with databases
-gi

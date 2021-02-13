@@ -190,6 +190,11 @@ private fun updatePrice() {
 // The elvis operator (?:) means that if the expression on the left is not null, then use it. 
 // Otherwise if the expression on the left is null, then use the expression to the right of the elvis operator (which is 0 in this case).
 
+// ✅ ViewModelFactory 
+// The factory method pattern is a creational design pattern that uses factory methods to create objects. 
+// A factory method is a method that returns an instance of the same class
+// In this task, you create a ViewModel with a parameterized constructor for the fragment and a factory method to instantiate the ViewModel.
+
 // ✅ Tasks and BackStack
 // : A task is a collection of activities that the user interacts with when performing a certain job (i.e. checking email, creating a cupcake order, taking a photo).
 // : Activities are arranged in a stack, known as a back stack, where each new activity the user visits gets pushed onto the back stack for the task.
