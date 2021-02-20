@@ -211,7 +211,7 @@ fun main() {
         5 -> println("Don't cry! You rolled a 5. Try again!")
         6 -> println("Apologies! you rolled a 6. Try again!")
     }
-}
+}`  
 // Read this as, "If rollResult is luckyNumber, then print the "You win!" message."
 // ❓ when the value of the when expression is assigned to a variable, the 'when' must be exhaustive. 
 // ❗ Let's add necessary ‘else' branch.

@@ -74,3 +74,4 @@ suspend fun preparePost(): Token {
     return suspendCoroutine { /* ... */ }
 }
 // ⬆ This code will launch a long-running operation without blocking the main thread.
+// Coroutines use suspend functions to make asynchronous code sequential.
