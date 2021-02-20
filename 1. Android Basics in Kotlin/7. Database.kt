@@ -78,6 +78,7 @@ suspend fun suspendDAOFunction() {
    longrunningDatabaseWork()
 }
 
+// ◽ Basic set-up
 // step1. Mark DAO functions as suspend functions
 // => Room already uses a background thread for that specific @Query which returns LiveData. The complete SleepDatabaseDao class will look like this.
 
@@ -94,3 +95,16 @@ suspend fun suspendDAOFunction() {
 // step5. Add the click handler for the Stop button
 
 // step6. Add the click handler for the Clear button
+
+// ◽ Triggering Navigation
+// 1. Define onClick handlers to trigger navigation to a destination fragment.
+// => onStopTracking(), onSetSleepQuality()
+// 2. Define a LiveData value to record if navigation should occur.
+// 3. Attach an observer to that LiveData value.
+// 4. Your code then changes that value whenever navigation needs to be triggered or is complete.
+
+// ◽ android:enabled attribute
+// : The android:enabled attribute is defined in TextView and inherited by all subclasses, including Button.
+// => The android:enabled attribute determines whether or not a View is enabled. The meaning of "enabled" varies by subclass. For example, a non-enabled EditText prevents the user from editing the contained text, and a non-enabled Button prevents the user from tapping the button.
+// => The enabled attribute is not the same as the visibility attribute.
+// => You can use transformation maps to set the value of the enabled attribute of buttons based on the state of another object or variable.

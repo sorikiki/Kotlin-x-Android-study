@@ -195,6 +195,7 @@ private fun updatePrice() {
 // A factory method is a method that returns an instance of the same class
 // In this task, you create a ViewModel with a parameterized constructor for the fragment and a factory method to instantiate the ViewModel.
 // ❓ Why we use: for a parameterized class
+// ex. when you need to pass database as a parameter into ViewModel from the factory.
 
 // ✅ Tasks and BackStack
 // : A task is a collection of activities that the user interacts with when performing a certain job (i.e. checking email, creating a cupcake order, taking a photo).
