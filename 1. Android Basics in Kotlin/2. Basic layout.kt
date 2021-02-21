@@ -127,6 +127,7 @@ binding.myButton.text = "A button"
 
 // ◽ A view holder. 
 // - The view holder extends the ViewHolder class. It contains the view information for displaying one item from the item's layout. View holders also add information that RecyclerView uses to efficiently move views around the screen.
+// => If RecyclerView does need to access the views stored in the ViewHolder, it can do so using the view holder's itemView property.
 
 // ◽ An adapter. The adapter connects your data to the RecyclerView. It adapts the data so that it can be displayed in a ViewHolder. A RecyclerView uses the adapter to figure out how to display the data on the screen.
 // - The adapter creates a view holder and fills it with data for the RecyclerView to display.
@@ -145,4 +146,30 @@ binding.myButton.text = "A button"
 // - The RecyclerView needs to know about the adapter to use to get view holders.
 
 // N O T E : Because these view holders are recycled, make sure onBindViewHolder() sets or resets any customizations that previous items might have set on a view holder.
-// => we'll deal with this issue later.
+if (item.sleepQuality <= 1) {
+   holder.textView.setTextColor(Color.RED) // red
+} else {
+   // reset
+   holder.textView.setTextColor(Color.BLACK) // black
+}
+
+// 🌟 Plus
+// 1) add a custom setter 
+// : To tell the RecyclerView when the data that it's displaying has changed, add a custom setter to the data variable
+// => Hence, in the setter, give data a new value, then call notifyDataSetChanged() to trigger redrawing the list with the new data.
+var data =  listOf<SleepNight>()
+   set(value) {
+       field = value
+       notifyDataSetChanged()
+   }
+// Note: When notifyDataSetChanged() is called, the RecyclerView redraws the whole list, not just the changed items. 
+
+// 2) "itemView"
+// If RecyclerView does need to access the views stored in the ViewHolder, it can do so using the view holder's itemView property. 
+// RecyclerView uses itemView when it's binding an item to display on the screen, when drawing decorations around a view like a border, and for implementing accessibility.
+
+// 3) refactoring
+// In a production app, you might have multiple view holders, more complex adapters, and multiple developers making changes. 
+// => You should structure your code so that everything related to a view holder is only in the view holder.
+// => Inflation should happen in the ViewHolder.
+// * Typically, onBindViewHolder() inflates the layout for an item, and puts the data in the views in the layout.
