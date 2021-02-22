@@ -154,8 +154,8 @@ if (item.sleepQuality <= 1) {
 }
 
 // 🌟 Plus
-// 1) add a custom setter 
-// : To tell the RecyclerView when the data that it's displaying has changed, add a custom setter to the data variable
+// 1) How to tell the RecyclerView when the data that it's displaying has changed?
+// a simplay way to do is to add a custom setter to the data variable
 // => Hence, in the setter, give data a new value, then call notifyDataSetChanged() to trigger redrawing the list with the new data.
 var data =  listOf<SleepNight>()
    set(value) {
@@ -163,6 +163,15 @@ var data =  listOf<SleepNight>()
        notifyDataSetChanged()
    }
 // Note: When notifyDataSetChanged() is called, the RecyclerView redraws the whole list, not just the changed items. 
+// => However, this is a lot of unnecessary work for large or complex lists.
+// => To fix this problem, you can tell RecyclerView exactly what has changed. RecyclerView can then update only the views that changed on screen.
+// => You could use notifyItemChanged() to tell RecyclerView that an item has changed, and you could use similar functions for items that are added, removed, or moved. You could do it all manually, but that task would be non-trivial and might involve quite a bit of code.
+
+// ✨ RecyclerView has a class called DiffUtil which is for calculating the differences between two lists. DiffUtil takes an old list and a new list and figures out what's different. It finds items that were added, removed, or changed. 
+// 1. Implement SleepNightDiffCallback.
+// 2. Change your adapter to extend ListAdapter.
+// => ListAdapter helps you build a RecyclerView adapter that's backed by a list.
+// 3. Use submitList() to keep the list updated.
 
 // 2) "itemView"
 // If RecyclerView does need to access the views stored in the ViewHolder, it can do so using the view holder's itemView property. 
