@@ -182,3 +182,12 @@ var data =  listOf<SleepNight>()
 // => You should structure your code so that everything related to a view holder is only in the view holder.
 // => Inflation should happen in the ViewHolder.
 // * Typically, onBindViewHolder() inflates the layout for an item, and puts the data in the views in the layout.
+
+// 3) create binding adapters
+// if you need to bind different types of data, or complex types, you can provide binding adapters to help data binding use those types.
+// Binding adapters are adapters that take your data and adapt it into something that data binding can use to bind a view, like text or an image.
+// to declare a binding adapter, you define a method that takes an item and a view, and annotate it with @BindingAdapter. In the body of the method, you implement the transformation. 
+// In Kotlin, you can write a binding adapter as an extension function on the view class that receives the data.
+// In the XML layout, set an app property with the same name as the binding adapter. Pass in a variable with the data. 
+
+// + It's always a good idea to call executePendingBindings() when you use binding adapters in a RecyclerView, because it can slightly speed up sizing the views.
