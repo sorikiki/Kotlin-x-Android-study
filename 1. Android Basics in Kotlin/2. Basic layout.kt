@@ -183,7 +183,7 @@ var data =  listOf<SleepNight>()
 // => Inflation should happen in the ViewHolder.
 // * Typically, onBindViewHolder() inflates the layout for an item, and puts the data in the views in the layout.
 
-// 3) create binding adapters
+// 4) create binding adapters
 // if you need to bind different types of data, or complex types, you can provide binding adapters to help data binding use those types.
 // Binding adapters are adapters that take your data and adapt it into something that data binding can use to bind a view, like text or an image.
 // to declare a binding adapter, you define a method that takes an item and a view, and annotate it with @BindingAdapter. In the body of the method, you implement the transformation. 
@@ -191,3 +191,21 @@ var data =  listOf<SleepNight>()
 // In the XML layout, set an app property with the same name as the binding adapter. Pass in a variable with the data. 
 
 // + It's always a good idea to call executePendingBindings() when you use binding adapters in a RecyclerView, because it can slightly speed up sizing the views.
+
+// 5) gridLayoutManager: The GridLayoutManager for RecyclerView lays out the data as a scrollable grid.
+// By default, the GridLayoutManager lays out each item in one span until the span count, which you specify. When it reaches the span count, it wraps to the next line.
+// By default, each item takes up one span, but you can make an item wider by specifying how many spans it is to occupy.
+// When you create a GridLayoutManager, you specify the orientation separately from the number of spans, and "span" is "direction-agnostic." In a (default) vertical configuration, "span" and "column" are equivalent.
+// The GridLayoutManager constructor takes up to four arguments: a context, which is the activity, the number spans (columns, in the default vertical layout), an orientation (default is vertical), and whether it's a reverse layout (default is false).
+// GridLayoutManager does its best to meet all constraints when laying out the grid, adding whitespace or clipping items.
+
+// 6) more than one ViewHolder
+// vs change the dataset to contain all of items.
+// Changing the dataset doesn't introduce much change to the rest of the adapter code, and you can add header logic by manipulating the list of data.
+// On the other hand, using a different ViewHolder by checking indexes for headers gives more freedom on the layout of the header. 
+// It also lets the adapter handle how data is adapted to the view without modifying the backing data.
+
+// ❓ sealed class
+// : A sealed class defines a closed type, which means that all subclasses of DataItem must be defined in this file.
+// => As a result, the number of subclasses is known to the compiler.
+// => It's not possible for another part of your code to define a new type of DataItem that could break your adapter.
